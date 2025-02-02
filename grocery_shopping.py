@@ -1,3 +1,10 @@
+# Author: Max Mendez
+# github: maxmendez13
+# project purpose: to help shoppers with navigating larger grocery stores
+# and optimally produce a shopping list that the user can follow
+# originally used sql but could not integrate into final solution
+
+
 import sys
 
 # takes shoppers cart data and organizes it with
@@ -104,19 +111,23 @@ item_priority = [
     {'item_type':'baked', 'priority_level':0}
 ]
 
+#helper function to sort by aisle
 def sortingByAisle(e):
     return e['aisle']
 
 food_products.sort(key=sortingByAisle)
 #print(food_products)
 
+#helper function to sort by priority level
 def sortingByPriorityLevel(e):
     return e['priority_level']
 
 item_priority.sort(key=sortingByPriorityLevel)
 #print(item_priority)
 
+# make it a dictionary so you can add the quantity, price etc etc but if i have time
 cart = []
+
 
 def item_catalogue():
     #use the dictionary and output it in a readable format
@@ -136,7 +147,7 @@ def item_catalogue():
 def add_to_cart():
     flag = True
     while flag:
-        answer = input("Enter the name or ID of the item you would like to add to your cart\nEnter 'Q' to quit\n")
+        answer = input("\nEnter the name or ID of the item you would like to add to your cart\nEnter 'Q' to quit\n")
         if answer.lower() == 'q':
             flag = False
             continue
@@ -146,21 +157,112 @@ def add_to_cart():
         except ValueError:
             check = 'item_name'
         
-        if check == 'item_id':
-            answer = int(answer)
-        # when it's item_id only check id when name only check name
+        
+        exists = False
         for x in food_products:
-            if x.keys()[x.values().index(answer)] != None:
-                cart.append(x.get("item_id"))
-                break
+            if check == 'item_id':
+                answer = int(answer)
+                if x.get("item_id") == answer:
+                    cart.append(x.get("item_id"))
+                    print("> Successfully added " + x.get("item_name"))
+                    exists = True
+            else:
+                if x.get("item_name").lower() == answer.lower():
+                    cart.append(x.get("item_name"))
+                    print("> Successfully added " + x.get("item_name"))
+                    exists = True
+        if exists == False:
+            print("> Item does not exist")
     
+
+def check_cart():
+    
+    flag = True
+    while flag:
+        print("\nHere is your current cart")
+        for x in cart:
+            print(x)
+        print('\n')
+        print("Select one of the following: \n1 Remove an item \n2 Quit")
+        answer = input()
+        try:
+            val = int(answer)
+        except ValueError:
+            print("Please enter a valid option")
+            continue
+        answer = int(answer)
+        if answer == 1:
+            print("Enter the item name you'd like to remove")
+            removal = input().capitalize()
+            if removal in cart:
+                cart.remove(removal)
+            else:
+                print("That item is not in your cart")
+        elif answer == 2:
+            flag = False
+        else:
+            print("Please enter a valid option")
+
+def generate_shopping_list():
+    # check for the aisle of each item
+    # sort what items should be gotten first
+    #   do this with aisle in mind and also priority
+    # shopping list is a dictionary so it has name of item, then aisle
+    # given all of the stuff in the cart, pull from the fake databases
+
+    # item_name, aisle, priority
+    # list of dictionaries
+
+    shopping_list = []
+    for x in cart:
+        aisleNum = 0
+        priorityLvl = -1
+        for y in food_products:
+            if y.get("item_name") == x:
+                aisleNum = y.get("aisle")
+                priorityLvl = getPriority(y.get("item_type"))
+        shopping_list.append({"item_name":x, "aisle":aisleNum, "priority_level":priorityLvl})
+
+
+    # now sort by priority level as well, combining a mix of both priority level and location
+    # use lambda function
+
+
+    sortedShoppingList = sorted(shopping_list, key=lambda e: (e['aisle'], e['priority_level']))
+
+    for z in sortedShoppingList:
+        for key, value in z.items():
+            if key == 'item_name':
+                sys.stdout.write(f"Item: {value} ")
+            elif key == 'aisle':
+                sys.stdout.write(f"Aisle Number: {value} ")
+        print('\n')
+    print('\n')
+
+
+    # to go further, check adjacent elements in list to see if they are higher priority items
+    # only allow for about 1 aisle in difference per each side
+    #       for example: if ice cream was in aisle 8 and dog food in aisle 7, get dog food first then ice cream
+    # highest priority items (such as baked goods that sell out fast) should be gotten first no matter what
+
+
+
+
+    
+def getPriority(item_type):
+    for z in item_priority:
+        if z.get("item_type") == item_type:
+            return z.get("priority_level")
+
+
+
 
 
 # portion where person does shopping
 def main():
     flag = True
     while flag:
-        print('Hello welcome to RiteShop! Select one of the following: \n1 Look at items \n2 Add item to cart \n3 Check cart \n4 Generate shopping list \n5 Quit')
+        print('\nHello welcome to RiteShop! Select one of the following: \n1 Look at items \n2 Add item to cart \n3 Check cart \n4 Generate shopping list \n5 Quit')
         answer = input()
         try:
             val = int(answer)
@@ -174,9 +276,9 @@ def main():
         elif answer == 2:
             add_to_cart()
         elif answer == 3:
-            ajsdkajsd
+            check_cart()
         elif answer == 4:
-            asjdkasdjl
+            generate_shopping_list()
         elif answer == 5:
             print("Thank you for using RiteShop!")
             flag = False

@@ -1,0 +1,143 @@
+This text file contains the original sql databases and queries that were created
+Ultimately I couldn't figure out how to combine this with my final coding solution
+so I scrapped this idea and moved onto showcasing the idea entirely in Python
+If possible, my solution would have used a database of grocery items from a store 
+and then on the front end would have had a way to see the newly generated shopping list
+
+DROP DATABASE IF EXISTS `Grocery_Store`;
+CREATE DATABASE `Grocery_Store`;
+USE `Grocery_Store`;
+
+
+CREATE TABLE food_products (
+  item_id INT NOT NULL,
+  item_name VARCHAR(50),
+  item_type VARCHAR(50),
+  aisle_number INT,
+  price float,
+  PRIMARY KEY (item_id)
+);
+
+-- #have to create a table with item priorities
+-- #use other table to check each product and then write code to assign each item that a customer gets with a priority
+-- #priority scale:
+-- # 0 - need to get at the beginning of the trip item's that sell out quickly, baked goods to try to get what's fresh, etc
+-- # 1 - can get whenever
+-- # 2 - refrigerator items
+-- # 3 - frozen items
+-- # 0 get first, 3 get last
+
+CREATE TABLE item_priority (
+  item_type VARCHAR(50),
+  priority_level INT
+);
+
+
+INSERT INTO food_products (item_id, item_name, item_type, aisle_number, price)
+VALUES
+(4011,'Bananas', 'produce', 1, 3.99),
+(4025,'Hass Avocados', 'produce', 1, 5.99),
+(514011,'Vanilla Ice Cream', 'frozen', 18, 3.99),
+(3283,'Honeycrisp Apples', 'produce', 1, 2.99),
+(654321,'Black Beans', 'canned', 6, 4.50),
+(5461894,'Brown Rice', 'grain', 9, 7.99),
+(211204,'AA Batteries', 'electronics', 12, 5.39),
+(654650,'Phone Charger', 'electronics', 12, 3.99),
+(251025,'Ground Beef', 'meat', 10, 12.50),
+(415421,'Campbells Soup', 'canned', 6, 3.99),
+(545341,'Pork Shoulder', 'meat', 10, 13.99),
+(123456,'Whole Milk', 'dairy', 3, 4.29),
+(234567,'Cheddar Cheese', 'dairy', 3, 5.99),
+(345678,'Greek Yogurt', 'dairy', 3, 6.49),
+(456789,'Almond Milk', 'dairy', 3, 3.99),
+(567890,'Cage-Free Eggs', 'dairy', 3, 4.99),
+(678901,'Organic Tofu', 'produce', 2, 3.50),
+(789012,'Carrots', 'produce', 1, 2.49),
+(890123,'Broccoli', 'produce', 1, 3.29),
+(901234,'Baby Spinach', 'produce', 1, 4.19),
+(101112,'Frozen Pizza', 'frozen', 19, 8.99),
+(111213,'Chicken Nuggets', 'frozen', 18, 7.99),
+(121314,'Blueberries', 'produce', 1, 5.49),
+(131415,'Raspberries', 'produce', 1, 6.99),
+(141516,'Grapes', 'produce', 1, 4.59),
+(151617,'Lettuce', 'produce', 1, 2.99),
+(161718,'Canned Tuna', 'canned', 6, 3.79),
+(171819,'Pasta', 'grain', 9, 2.49),
+(181920,'Tomato Sauce', 'canned', 6, 3.29),
+(192021,'Peanut Butter', 'canned', 7, 4.99),
+(202122,'Jelly', 'canned', 7, 3.99),
+(212223,'Cereal', 'grain', 9, 5.99),
+(222324,'Oatmeal', 'grain', 9, 3.49),
+(232425,'Trail Mix', 'snack', 5, 6.29),
+(242526,'Potato Chips', 'snack', 5, 4.49),
+(252627,'Granola Bars', 'snack', 5, 3.99),
+(262728,'Chocolate Bar', 'snack', 5, 2.99),
+(272829,'Energy Drink', 'beverage', 4, 3.49),
+(282930,'Orange Juice', 'beverage', 4, 4.99),
+(292931,'Bottled Water', 'beverage', 4, 1.99),
+(303132,'Soda', 'beverage', 4, 2.99),
+(313233,'Coffee Beans', 'beverage', 4, 9.99),
+(323334,'Green Tea', 'beverage', 4, 5.49),
+(333435,'Shampoo', 'personal care', 11, 6.99),
+(343536,'Toothpaste', 'personal care', 11, 3.99),
+(353637,'Body Wash', 'personal care', 11, 5.49),
+(363738,'Deodorant', 'personal care', 11, 4.99),
+(373839,'Dish Soap', 'household', 13, 2.99),
+(383940,'Laundry Detergent', 'household', 13, 12.99),
+(393041,'Paper Towels', 'household', 13, 7.99),
+(403142,'Toilet Paper', 'household', 13, 8.99),
+(413243,'Light Bulbs', 'household', 13, 6.49),
+(423344,'Dog Food', 'pet', 15, 19.99),
+(433445,'Cat Food', 'pet', 15, 17.99),
+(443546,'Fish Food', 'pet', 15, 6.99),
+(453647,'Bird Seed', 'pet', 15, 9.49),
+(463748,'Dog Treats', 'pet', 15, 4.99),
+(473849,'Cat Litter', 'pet', 15, 14.99),
+(483950,'Frozen Berries', 'frozen', 18, 6.99),
+(494051,'Frozen Vegetables', 'frozen', 18, 4.99),
+(504152,'Beef Steak', 'meat', 10, 15.99),
+(514253,'Chicken Breast', 'meat', 10, 8.99),
+(524354,'Salmon Fillet', 'meat', 10, 13.99),
+(534455,'Turkey Sausage', 'meat', 10, 6.99),
+(544556,'Bacon', 'meat', 10, 7.99),
+(554657,'Maple Syrup', 'canned', 7, 9.99),
+(564758,'Olive Oil', 'canned', 7, 12.99),
+(574859,'Soy Sauce', 'canned', 7, 3.99),
+(584960,'Hot Sauce', 'canned', 7, 2.99),
+(594061,'Balsamic Vinegar', 'canned', 7, 5.99),
+(604162,'Whole Wheat Bread', 'baked', 8, 3.99),
+(614263,'Bagels', 'baked', 8, 4.49),
+(624364,'Croissants', 'baked', 8, 5.99),
+(634465,'Muffins', 'baked', 8, 4.99),
+(644566,'Baguette', 'baked', 8, 3.49),
+(654667,'Pita Bread', 'baked', 8, 2.99),
+(664768,'Brown Rice', 'grain', 9, 6.99),
+(674869,'Quinoa', 'grain', 9, 7.99),
+(684970,'Couscous', 'grain', 9, 4.49),
+(695071,'Barley', 'grain', 9, 3.79),
+(705172,'Cornmeal', 'grain', 9, 2.99);
+;
+
+
+INSERT INTO item_priority (item_type, priority_level)
+VALUES
+('produce', 1),
+('canned', 1),
+('meat', 2),
+('frozen', 3),
+('pet', 1),
+('grain', 2),
+('household', 1),
+('dairy', 2),
+('personal care', 2),
+('beverage', 2),
+('electronic', 1),
+('snack', 1),
+('baked', 0);
+
+
+SELECT * FROM grocery_store.food_products
+order by aisle_number;
+
+select * from grocery_store.item_priority
+order by priority_level;
